@@ -1,0 +1,13 @@
+{
+    "name": "muse/array_get",
+    "description": "Array function to retrieve vals",
+    "license": "Unlicense",
+    "require": {
+        "php": ">=5.3"
+    },
+    "autoload": {
+        "files": [
+            "array_get.php"
+        ]
+    }
+}
