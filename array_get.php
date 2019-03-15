@@ -16,16 +16,12 @@
  *  'k1','i1' - default value is only array
  *  'kf','if' - flip default matching
  *
- * Return values by mode:
- *  case 'k' or 'i': array (contains all keys) if $search is array
- *  case 'v' or 's': awlays array, contains only found keys
- *
  * @param array $array
  * @param string $fmode one of 'k', 'v', 'i' or 's'
  * @param mixed $search values to return
  * @param mixed $default default value for 'k' and 'i'
  *
- * @return mixed value(s), depends on $fmode
+ * @return mixed value(s), array, if $search is array else value/null
  */
 function array_get(array $array, $fmode = 'i', $search = 0, $default = null)
 {
@@ -81,8 +77,6 @@ function array_get(array $array, $fmode = 'i', $search = 0, $default = null)
                     continue;
                 }
             }
-
-            $found[$item] = null;
         }
     }
 
@@ -161,8 +155,6 @@ function array_get(array $array, $fmode = 'i', $search = 0, $default = null)
                     continue;
                 }
             }
-
-            $found[] = null;
         }
     }
 
@@ -366,7 +358,8 @@ if (class_exists('PHPUnit_Framework_TestCase')) {
                             "genre",
                             "genre",
                             null
-                        )
+                        ),
+                        "default" => null
                     ),
                     "expected" => array(
                         "members" => array(
@@ -382,6 +375,34 @@ if (class_exists('PHPUnit_Framework_TestCase')) {
                         123 => null,
                         "genre" => "alternative rock",
                         null => null
+                    )
+                ),
+
+                "multiple_mixed_no_default" => array(
+                    "args" => array(
+                        "array" => $list,
+                        "mode" => 'k',
+                        "search" => array(
+                            "members",
+                            2,
+                            '0',
+                            "lucky",
+                            123,
+                            "genre",
+                            "genre",
+                            null
+                        )
+                    ),
+                    "expected" => array(
+                        "members" => array(
+                            "vocals" => "daniel kongos",
+                            "daniel kongos",
+                            "dylan kongos",
+                            "jesse kongos",
+                            "johnny kongos"
+                        ),
+                        0 => "come with me now",
+                        "genre" => "alternative rock"
                     )
                 ),
 
@@ -798,7 +819,8 @@ if (class_exists('PHPUnit_Framework_TestCase')) {
                             -1,
                             -10,
                             -5
-                        )
+                        ),
+                        "default" => null
                     ),
                     "expected" => array(
                         "a day to remember",
@@ -815,6 +837,37 @@ if (class_exists('PHPUnit_Framework_TestCase')) {
                             "lets you down"
                         ),
                         null,
+                        "indianola"
+                    )
+                ),
+
+                "multiple_no_default" => array(
+                    "args" => array(
+                        "array" => $list,
+                        "mode" => 'i',
+                        "search" => array(
+                            1,
+                            10,
+                            10,
+                            0,
+                            0,
+                            -1,
+                            -10,
+                            -5
+                        )
+                    ),
+                    "expected" => array(
+                        "a day to remember",
+                        "indianola",
+                        "indianola",
+                        array(
+                            "you reflect me in my negative space",
+                            "please forgive me for the time you'll waste",
+                            "if you let me i'll give you a taste",
+                            "everyone eventually lets you down",
+                            "everyone eventually lets you down",
+                            "lets you down"
+                        ),
                         "indianola"
                     )
                 ),
@@ -978,7 +1031,8 @@ if (class_exists('PHPUnit_Framework_TestCase')) {
                     "args" => array(
                         "array" => $list,
                         "mode" => 'is',
-                        "search" => "1, -2, 10"
+                        "search" => "1, -2, 10",
+                        "default" => null
                     ),
                     "expected" => array(
                         "a day to remember",
@@ -987,16 +1041,40 @@ if (class_exists('PHPUnit_Framework_TestCase')) {
                     )
                 ),
 
+                "string_multiple_no_default" => array(
+                    "args" => array(
+                        "array" => $list,
+                        "mode" => 'is',
+                        "search" => "1, -2, 10"
+                    ),
+                    "expected" => array(
+                        "a day to remember",
+                        "negative space"
+                    )
+                ),
+
                 "string_skip" => array(
+                    "args" => array(
+                        "array" => $list,
+                        "mode" => 'is',
+                        "search" => ",-2,10",
+                        "default" => null
+                    ),
+                    "expected" => array(
+                        null,
+                        "negative space",
+                        null
+                    )
+                ),
+
+                "string_skip_no_defatult" => array(
                     "args" => array(
                         "array" => $list,
                         "mode" => 'is',
                         "search" => ",-2,10"
                     ),
                     "expected" => array(
-                        null,
-                        "negative space",
-                        null
+                        "negative space"
                     )
                 ),
 
