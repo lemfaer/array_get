@@ -9,5 +9,10 @@
         "files": [
             "array_get.php"
         ]
+    },
+    "autoload-dev": {
+        "files": [
+            "array_get_test.php"
+        ]
     }
 }
